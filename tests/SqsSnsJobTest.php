@@ -37,7 +37,6 @@ class SqsSnsJobTest extends TestCase
             $this->container,
             $this->sqsClient,
             $payload,
-            'connection_name',
             'default_queue',
             $routes
         );
@@ -116,7 +115,6 @@ class SqsSnsJobTest extends TestCase
             [
                 'Body' => json_encode($body),
             ],
-            'connection_name',
             'default_queue',
             []
         );

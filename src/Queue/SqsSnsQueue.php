@@ -51,7 +51,6 @@ class SqsSnsQueue extends SqsQueue
                 $this->container,
                 $this->sqs,
                 $response['Messages'][0],
-                $this->connectionName,
                 $queue,
                 $this->routes
             );

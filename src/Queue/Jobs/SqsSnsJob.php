@@ -16,7 +16,6 @@ class SqsSnsJob extends SqsJob
      * @param \Aws\Sqs\SqsClient $sqs
      * @param string $queue
      * @param array $job
-     * @param string $connectionName
      * @param array $routes
      * @return void
      */
@@ -24,13 +23,22 @@ class SqsSnsJob extends SqsJob
         Container $container,
         SqsClient $sqs,
         array $job,
-        $connectionName,
         $queue,
         array $routes
     ) {
-        parent::__construct($container, $sqs, $job, $connectionName, $queue);
+        parent::__construct($container, $sqs, $queue, $job);
 
         $this->job = $this->resolveSnsSubscription($this->job, $routes);
+    }
+
+    /**
+     * Get the decoded body of the job.
+     *
+     * @return array
+     */
+    public function payload()
+    {
+        return json_decode($this->getRawBody(), true);
     }
 
     /**
