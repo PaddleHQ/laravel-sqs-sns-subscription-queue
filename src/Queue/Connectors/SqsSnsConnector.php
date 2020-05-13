@@ -11,6 +11,21 @@ use Joblocal\LaravelSqsSnsSubscriptionQueue\Queue\SqsSnsQueue;
 class SqsSnsConnector extends SqsConnector
 {
     /**
+     * @var array
+     */
+    protected $awsConfig;
+
+    /**
+     * SqsSnsConnector constructor.
+     *
+     * @param array $awsConfig
+     */
+    public function __construct(array $awsConfig = [])
+    {
+        $this->awsConfig = $awsConfig;
+    }
+
+    /**
      * Establish a queue connection.
      *
      * @param array $config
@@ -18,11 +33,7 @@ class SqsSnsConnector extends SqsConnector
      */
     public function connect(array $config)
     {
-        $config = $this->getDefaultConfiguration($config);
-
-        if ($config['key'] && $config['secret']) {
-            $config['credentials'] = Arr::only($config, ['key', 'secret']);
-        }
+        $config = $this->getGlobalConfig($config);
 
         return new SqsSnsQueue(
             new SqsClient($config),
@@ -30,5 +41,10 @@ class SqsSnsConnector extends SqsConnector
             Arr::get($config, 'prefix', ''),
             Arr::get($config, 'routes', [])
         );
+    }
+
+    protected function getGlobalConfig(array $config): array
+    {
+        return $this->getDefaultConfiguration(array_merge($this->awsConfig, $config));
     }
 }
