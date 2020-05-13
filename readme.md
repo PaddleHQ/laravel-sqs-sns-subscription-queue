@@ -1,7 +1,6 @@
 # AWS SQS SNS Subscription Queue
 
-[![Downloads](https://img.shields.io/packagist/dt/joblocal/laravel-sqs-sns-subscription-queue.svg)](https://packagist.org/packages/joblocal/laravel-sqs-sns-subscription-queue)
-[![Version](https://img.shields.io/packagist/v/joblocal/laravel-sqs-sns-subscription-queue.svg)](https://packagist.org/packages/joblocal/laravel-sqs-sns-subscription-queue)
+Forked from https://github.com/joblocal/laravel-sqs-sns-subscription-queue for compatability with Laravel 5.2.
 
 A simple extension to the [Illuminate/Queue](https://github.com/illuminate/queue) queue system used in [Laravel](https://laravel.com) and [Lumen](https://lumen.laravel.com/).
 
@@ -14,8 +13,8 @@ Understand that this package will not handle publishing to SNS, please use the [
 
 ## Requirements
 
--   Laravel (tested with version 5.8)
--   or Lumen (tested with version 5.8)
+-   Laravel (tested with version 5.2)
+-   or Lumen (tested with version 5.2)
 
 
 ## Usage
@@ -43,14 +42,13 @@ $app->register(Joblocal\LaravelSqsSnsSubscriptionQueue\SqsSnsServiceProvider::cl
 
 You'll need to configure the queue connection in your config/queue.php
 
+AWS config found in config/aws.php will be automatically merged in.
+
 ```php
 'connections' => [
-  'sqs-sns' => [
+  'sqs-sns-connection' => [
     'driver' => 'sqs-sns',
-    'key'    => env('AWS_ACCESS_KEY', 'your-public-key'),
-    'secret' => env('AWS_SECRET_ACCESS_KEY', 'your-secret-key'),
     'queue'  => env('QUEUE_URL', 'your-queue-url'),
-    'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     'routes' => [
         // you can use the "Subject" field
         'Subject' => 'App\\Jobs\\YourJob',
@@ -63,31 +61,25 @@ You'll need to configure the queue connection in your config/queue.php
 ```
 
 Once the sqs-sns queue connector is configured you can start
-using it by setting queue driver to 'sqs-sns' in your .env file.
+using it by running `php artisan queue:listen sqs-sns-connection`
+
+Note that the body of SNS messages must be valid JSON for this queue processor to work.
 
 
 ### Job class example
 
 ```php
-use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+namespace App\Jobs;
 
-/**
- * Example Job class
- */
-class Job implements ShouldQueue
+use Joblocal\LaravelSqsSnsSubscriptionQueue\BaseJob;
+
+class YourJob extends BaseJob
 {
-  use InteractsWithQueue, Queueable, SerializesModels;
-
-  /**
-   * @param string  $subject   SNS Subject
-   * @param array   $payload   JSON decoded 'Message'
-   */
-  public function __construct(string $subject, array $payload)
-  {
-  }
+    public function handle()
+    {
+        // handle queue item
+        var_dump($this->subject, $this->payload);
+    }
 }
 ```
 
@@ -120,14 +112,4 @@ Illuminate\Queue\Jobs\SqsJob requires the following signature:
     "command": "...",
   }
 }
-```
-
-
-## Installation
-
-The best way to install laravel-sqs-sns-subscription is by using [Composer](http://getcomposer.org/).
-
-To install the most recent version:
-```sh
-php composer.phar require joblocal/laravel-sqs-sns-subscription-queue
 ```
