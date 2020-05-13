@@ -35,5 +35,11 @@ abstract class BaseJob implements ShouldQueue
         $this->payload = $payload;
     }
 
+    /**
+     * Process the job. To fail the job throw an exception.
+     *
+     * @throws \Exception
+     * @return void
+     */
     abstract public function handle();
 }

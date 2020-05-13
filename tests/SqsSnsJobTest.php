@@ -36,8 +36,8 @@ class SqsSnsJobTest extends TestCase
         return new SqsSnsJob(
             $this->container,
             $this->sqsClient,
-            $payload,
             'default_queue',
+            $payload,
             $routes
         );
     }
@@ -112,10 +112,10 @@ class SqsSnsJobTest extends TestCase
         $defaultSqsJob = new SqsSnsJob(
             $this->container,
             $this->sqsClient,
+            'default_queue',
             [
                 'Body' => json_encode($body),
             ],
-            'default_queue',
             []
         );
 

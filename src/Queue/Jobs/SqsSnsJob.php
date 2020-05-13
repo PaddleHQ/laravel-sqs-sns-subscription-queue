@@ -22,8 +22,8 @@ class SqsSnsJob extends SqsJob
     public function __construct(
         Container $container,
         SqsClient $sqs,
-        array $job,
         $queue,
+        array $job,
         array $routes
     ) {
         parent::__construct($container, $sqs, $queue, $job);
