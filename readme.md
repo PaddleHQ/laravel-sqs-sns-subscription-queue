@@ -101,15 +101,3 @@ When SNS publishes to SQS queues the received message signature is as follows:
   "UnsubscribeURL" : "..."
 } 
 ```
-
-Illuminate\Queue\Jobs\SqsJob requires the following signature:
-
-```json
-{
-  "job": "Illuminate\\Queue\\CallQueuedHandler@call",
-  "data": {
-    "commandName": "App\\Jobs\\YourJob",
-    "command": "...",
-  }
-}
-```

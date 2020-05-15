@@ -12,8 +12,8 @@ class SqsSnsJob extends SqsJob
     /**
      * Create a new job instance.
      *
-     * @param \Illuminate\Container\Container $container
-     * @param \Aws\Sqs\SqsClient $sqs
+     * @param Container $container
+     * @param SqsClient $sqs
      * @param string $queue
      * @param array $job
      * @param array $routes
@@ -94,14 +94,7 @@ class SqsSnsJob extends SqsJob
      */
     protected function makeCommand($commandName, $body)
     {
-        $payload = json_decode($body['Message'], true);
-
-        $data = [
-            'subject' => $body['Subject'],
-            'payload' => $payload
-        ];
-
-        $instance = $this->container->make($commandName, $data);
+        $instance = $this->container->make($commandName, [$body]);
 
         return serialize($instance);
     }

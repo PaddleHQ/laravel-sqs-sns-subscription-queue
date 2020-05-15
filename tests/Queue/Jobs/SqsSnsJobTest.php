@@ -1,6 +1,6 @@
 <?php
 
-namespace Joblocal\LaravelSqsSnsSubscriptionQueue\Tests;
+namespace Joblocal\LaravelSqsSnsSubscriptionQueue\Tests\Queue\Jobs;
 
 use PHPUnit\Framework\TestCase;
 use Aws\Sqs\SqsClient;

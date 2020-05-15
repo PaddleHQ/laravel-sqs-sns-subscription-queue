@@ -3,7 +3,6 @@
 namespace Joblocal\LaravelSqsSnsSubscriptionQueue\Tests;
 
 use Orchestra\Testbench\TestCase;
-use Illuminate\Queue\QueueManager;
 
 use Joblocal\LaravelSqsSnsSubscriptionQueue\SqsSnsServiceProvider;
 use Joblocal\LaravelSqsSnsSubscriptionQueue\Queue\Connectors\SqsSnsConnector;
@@ -13,7 +12,7 @@ class SqsSnsServiceProviderTest extends TestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Joblocal\LaravelSqsSnsSubscriptionQueue\SqsSnsServiceProvider',
+            SqsSnsServiceProvider::class,
         ];
     }
 

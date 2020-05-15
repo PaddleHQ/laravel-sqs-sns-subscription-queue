@@ -1,6 +1,6 @@
 <?php
 
-namespace Joblocal\LaravelSqsSnsSubscriptionQueue\Tests;
+namespace Joblocal\LaravelSqsSnsSubscriptionQueue\Tests\Queue\Connectors;
 
 use PHPUnit\Framework\TestCase;
 use Joblocal\LaravelSqsSnsSubscriptionQueue\Queue\Connectors\SqsSnsConnector;

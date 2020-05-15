@@ -6,33 +6,36 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Joblocal\LaravelSqsSnsSubscriptionQueue\Exception\JsonDecodeException;
 
 abstract class BaseJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * SNS message Subject
-     *
-     * @var string
-     */
-    protected $subject;
-
-    /**
-     * SNS message json decoded body
+     * SNS Message
      *
      * @var array
      */
-    protected $payload;
+    protected $snsMessage;
 
     /**
-     * @param string $subject SNS Subject
-     * @param array  $payload JSON decoded 'Message'
+     * @param array $snsMessage (
+     *      @param string Type
+     *      @param string MessageId
+     *      @param string TopicArn
+     *      @param string Subject
+     *      @param string Message
+     *      @param string Timestamp
+     *      @param string SignatureVersion
+     *      @param string Signature
+     *      @param string SigningCertURL
+     *      @param string UnsubscribeURL
+     * )
      */
-    public function __construct(string $subject, array $payload)
+    public function __construct(array $snsMessage)
     {
-        $this->subject = $subject;
-        $this->payload = $payload;
+        $this->snsMessage = $snsMessage;
     }
 
     /**
@@ -42,4 +45,51 @@ abstract class BaseJob implements ShouldQueue
      * @return void
      */
     abstract public function handle();
+
+    public function getType(): string
+    {
+        return $this->snsMessage['Type'] ?? '';
+    }
+
+    public function getMessageId(): string
+    {
+        return $this->snsMessage['MessageId'] ?? '';
+    }
+
+    public function getSubject(): string
+    {
+        return $this->snsMessage['Subject'] ?? '';
+    }
+
+    public function getMessage(): string
+    {
+        return $this->snsMessage['Message'] ?? '';
+    }
+
+    public function getTopicArn(): string
+    {
+        return $this->snsMessage['TopicArn'] ?? '';
+    }
+
+    public function getTimestamp(): string
+    {
+        return $this->snsMessage['Timestamp'] ?? '';
+    }
+
+    /**
+     * Return a json decoded version of the SNS message
+     *
+     * @return array
+     * @throws JsonDecodeException
+     */
+    public function getJsonDecodedMessage(): array
+    {
+        $message = json_decode($this->getMessage(), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new JsonDecodeException($this->getMessage(), json_last_error());
+        }
+
+        return $message;
+    }
 }
