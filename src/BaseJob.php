@@ -87,7 +87,7 @@ abstract class BaseJob implements ShouldQueue
         $message = json_decode($this->getMessage(), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new JsonDecodeException($this->getMessage(), json_last_error());
+            throw new JsonDecodeException($this->getMessage(), json_last_error_msg());
         }
 
         return $message;
