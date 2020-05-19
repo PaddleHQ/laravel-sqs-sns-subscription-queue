@@ -50,9 +50,8 @@ class SqsSnsQueue extends SqsQueue
             return new SqsSnsJob(
                 $this->container,
                 $this->sqs,
-                $response['Messages'][0],
-                $this->connectionName,
                 $queue,
+                $response['Messages'][0],
                 $this->routes
             );
         }

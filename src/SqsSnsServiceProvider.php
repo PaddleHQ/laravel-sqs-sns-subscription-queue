@@ -26,7 +26,8 @@ class SqsSnsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['queue']->extend('sqs-sns', function () {
-            return new SqsSnsConnector;
+            $awsConfig = $this->app['config']->get('aws');
+            return new SqsSnsConnector($awsConfig ?? []);
         });
     }
 }

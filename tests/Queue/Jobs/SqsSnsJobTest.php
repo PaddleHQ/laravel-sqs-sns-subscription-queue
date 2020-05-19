@@ -1,6 +1,6 @@
 <?php
 
-namespace Joblocal\LaravelSqsSnsSubscriptionQueue\Tests;
+namespace Joblocal\LaravelSqsSnsSubscriptionQueue\Tests\Queue\Jobs;
 
 use PHPUnit\Framework\TestCase;
 use Aws\Sqs\SqsClient;
@@ -36,9 +36,8 @@ class SqsSnsJobTest extends TestCase
         return new SqsSnsJob(
             $this->container,
             $this->sqsClient,
-            $payload,
-            'connection_name',
             'default_queue',
+            $payload,
             $routes
         );
     }
@@ -113,11 +112,10 @@ class SqsSnsJobTest extends TestCase
         $defaultSqsJob = new SqsSnsJob(
             $this->container,
             $this->sqsClient,
+            'default_queue',
             [
                 'Body' => json_encode($body),
             ],
-            'connection_name',
-            'default_queue',
             []
         );
 

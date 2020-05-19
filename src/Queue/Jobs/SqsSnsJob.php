@@ -12,25 +12,33 @@ class SqsSnsJob extends SqsJob
     /**
      * Create a new job instance.
      *
-     * @param \Illuminate\Container\Container $container
-     * @param \Aws\Sqs\SqsClient $sqs
+     * @param Container $container
+     * @param SqsClient $sqs
      * @param string $queue
      * @param array $job
-     * @param string $connectionName
      * @param array $routes
      * @return void
      */
     public function __construct(
         Container $container,
         SqsClient $sqs,
-        array $job,
-        $connectionName,
         $queue,
+        array $job,
         array $routes
     ) {
-        parent::__construct($container, $sqs, $job, $connectionName, $queue);
+        parent::__construct($container, $sqs, $queue, $job);
 
         $this->job = $this->resolveSnsSubscription($this->job, $routes);
+    }
+
+    /**
+     * Get the decoded body of the job.
+     *
+     * @return array
+     */
+    public function payload()
+    {
+        return json_decode($this->getRawBody(), true);
     }
 
     /**
@@ -86,14 +94,7 @@ class SqsSnsJob extends SqsJob
      */
     protected function makeCommand($commandName, $body)
     {
-        $payload = json_decode($body['Message'], true);
-
-        $data = [
-            'subject' => $body['Subject'],
-            'payload' => $payload
-        ];
-
-        $instance = $this->container->make($commandName, $data);
+        $instance = $this->container->make($commandName, [$body]);
 
         return serialize($instance);
     }
