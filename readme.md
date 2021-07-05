@@ -1,6 +1,6 @@
 # AWS SQS SNS Subscription Queue
 
-Forked from https://github.com/joblocal/laravel-sqs-sns-subscription-queue for compatability with Laravel 5.2.
+Forked from https://github.com/joblocal/laravel-sqs-sns-subscription-queue for compatability with Laravel 5.2 & 5.3.
 
 A simple extension to the [Illuminate/Queue](https://github.com/illuminate/queue) queue system used in [Laravel](https://laravel.com) and [Lumen](https://lumen.laravel.com/).
 
@@ -13,8 +13,8 @@ Understand that this package will not handle publishing to SNS, please use the [
 
 ## Requirements
 
--   Laravel (tested with version 5.2)
--   or Lumen (tested with version 5.2)
+-   Laravel (tested with version 5.2, 5.3)
+-   or Lumen (tested with version 5.2, 5.3)
 
 
 ## Usage
